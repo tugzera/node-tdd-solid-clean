@@ -1,0 +1,11 @@
+{
+  "name": "node-clean-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/tugzera/node-tdd-solid-clean.git",
+  "author": "tugzera <damascenobdm@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "git-commit-msg-linter": "^2.7.0"
+  }
+}
