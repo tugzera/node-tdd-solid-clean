@@ -7,13 +7,18 @@ interface SutTypes {
     emailValidatorStub: EmailValidator
 }
 
-const makeSut = (): SutTypes => {
+const makeEmailValidator = (): EmailValidator => {
     class EmailValidatorStub implements EmailValidator {
         isValid(email: string): boolean {
             return true
         }
     }
-    const emailValidatorStub = new EmailValidatorStub()
+    return new EmailValidatorStub()
+}
+
+const makeSut = (): SutTypes => {
+
+    const emailValidatorStub = makeEmailValidator()
     const sut = new SignUpController(emailValidatorStub)
     return {
         sut, emailValidatorStub
@@ -28,7 +33,6 @@ describe('SignUp Controller', () => {
                 email: "any_email@mail.com",
                 password: "any_password",
                 confirm_password: "any_password"
-
             }
         }
         const response = sut.handle(httpRequest)
@@ -42,7 +46,6 @@ describe('SignUp Controller', () => {
                 name: 'any_name',
                 password: "any_password",
                 confirm_password: "any_password"
-
             }
         }
         const response = sut.handle(httpRequest)
@@ -56,7 +59,6 @@ describe('SignUp Controller', () => {
                 email: "any_email@mail.com",
                 name: 'any_name',
                 confirm_password: "any_password"
-
             }
         }
         const response = sut.handle(httpRequest)
