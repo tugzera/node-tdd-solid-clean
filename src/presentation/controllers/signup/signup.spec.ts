@@ -76,6 +76,20 @@ describe('SignUp Controller', () => {
         expect(response.statusCode).toBe(400)
     });
 
+    test('Should return error 400 if confirm password is different of password provided ', () => {
+        const { sut } = makeSut()
+        const httpRequest = {
+            body: {
+                email: "invalid_email@mail.com",
+                name: 'any_name',
+                password: "any_password",
+                confirm_password: "any_password"
+            }
+        }
+        const response = sut.handle(httpRequest)
+        expect(response.statusCode).toBe(400)
+    });
+
     test('Should return error 400 if an invalid email is provided ', () => {
         const { sut, emailValidatorStub } = makeSut()
         const httpRequest = {
