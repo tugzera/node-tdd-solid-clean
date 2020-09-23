@@ -1,7 +1,5 @@
+import { EmailValidator, AddAccount, AddAccountModel, Account } from './signup-protocols'
 import { SignUpController } from './signup'
-import { EmailValidator } from '../../protocols'
-import { AddAccount, AddAccountModel } from '../../../domain/usecases/add-account'
-import { Account } from '../../../domain/model/account'
 import { ServerError } from '../../errors'
 
 interface SutTypes {
