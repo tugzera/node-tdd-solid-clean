@@ -1,11 +1,30 @@
 import { SignUpController } from './signup'
+import { EmailValidator } from '../../protocols'
+
+interface SutTypes {
+    sut: SignUpController,
+    emailValidatorStub: EmailValidator
+}
+
+const makeSut = (): SutTypes => {
+    class EmailValidatorStub implements EmailValidator {
+        isValid(email: string): boolean {
+            return true
+        }
+    }
+    const emailValidatorStub = new EmailValidatorStub()
+    const sut = new SignUpController(emailValidatorStub)
+    return {
+        sut, emailValidatorStub
+    }
+}
 
 describe('SignUp Controller', () => {
     test('Should return error 400 if no name is provided', () => {
-        const sut = new SignUpController()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
-                email: "email@teste.com",
+                email: "any_email@mail.com",
                 password: "any_password",
                 confirm_password: "any_password"
 
@@ -16,7 +35,7 @@ describe('SignUp Controller', () => {
     });
 
     test('Should return error 400 if no email is provided', () => {
-        const sut = new SignUpController()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
                 name: 'any_name',
@@ -30,10 +49,10 @@ describe('SignUp Controller', () => {
     });
 
     test('Should return error 400 if no password is provided', () => {
-        const sut = new SignUpController()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
-                email: "email@teste.com",
+                email: "any_email@mail.com",
                 name: 'any_name',
                 confirm_password: "any_password"
 
@@ -44,15 +63,30 @@ describe('SignUp Controller', () => {
     });
 
     test('Should return error 400 if no password confirm is provided', () => {
-        const sut = new SignUpController()
+        const { sut } = makeSut()
         const httpRequest = {
             body: {
-                email: "email@teste.com",
+                email: "any_email@mail.com",
                 name: 'any_name',
                 password: "any_password"
 
             }
         }
+        const response = sut.handle(httpRequest)
+        expect(response.statusCode).toBe(400)
+    });
+
+    test('Should return error 400 if an invalid email is provided ', () => {
+        const { sut, emailValidatorStub } = makeSut()
+        const httpRequest = {
+            body: {
+                email: "invalid_email@mail.com",
+                name: 'any_name',
+                password: "any_password",
+                confirm_password: "any_password"
+            }
+        }
+        jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
         const response = sut.handle(httpRequest)
         expect(response.statusCode).toBe(400)
     });
