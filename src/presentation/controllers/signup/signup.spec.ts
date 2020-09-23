@@ -1,5 +1,6 @@
 import { SignUpController } from './signup'
 import { EmailValidator } from '../../protocols'
+import { ServerError } from '../../errors'
 
 interface SutTypes {
     sut: SignUpController,
@@ -80,10 +81,10 @@ describe('SignUp Controller', () => {
         const { sut } = makeSut()
         const httpRequest = {
             body: {
-                email: "invalid_email@mail.com",
                 name: 'any_name',
+                email: "invalid_email@mail.com",
                 password: "any_password",
-                confirm_password: "any_password"
+                confirm_password: "different_password"
             }
         }
         const response = sut.handle(httpRequest)
@@ -94,8 +95,8 @@ describe('SignUp Controller', () => {
         const { sut, emailValidatorStub } = makeSut()
         const httpRequest = {
             body: {
-                email: "invalid_email@mail.com",
                 name: 'any_name',
+                email: "invalid_email@mail.com",
                 password: "any_password",
                 confirm_password: "any_password"
             }
@@ -104,4 +105,8 @@ describe('SignUp Controller', () => {
         const response = sut.handle(httpRequest)
         expect(response.statusCode).toBe(400)
     });
+
+    // test('Should return error 500 if EmailValidator throws', () => {
+        
+    // });
 });
