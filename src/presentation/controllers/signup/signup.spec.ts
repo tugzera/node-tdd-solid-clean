@@ -70,7 +70,6 @@ describe('SignUp Controller', () => {
                 email: "any_email@mail.com",
                 name: 'any_name',
                 password: "any_password"
-
             }
         }
         const response = sut.handle(httpRequest)
@@ -106,7 +105,23 @@ describe('SignUp Controller', () => {
         expect(response.statusCode).toBe(400)
     });
 
-    // test('Should return error 500 if EmailValidator throws', () => {
-        
-    // });
+    test('Should return error 500 if EmailValidator throws', () => {
+        class EmailValidatorStub implements EmailValidator {
+            isValid(email: string): boolean {
+                throw new Error()
+            }
+        }
+        const emailValidatorStub = new EmailValidatorStub()
+        const sut = new SignUpController(emailValidatorStub)
+        const httpRequest = {
+            body: {
+                name: 'any_name',
+                email: 'any_email@mail.com',
+                password: 'any_password',
+                confirm_password: 'any_password'
+            }
+        }
+        const response = sut.handle(httpRequest)
+        expect(response.statusCode).toBe(500)
+    });
 });
