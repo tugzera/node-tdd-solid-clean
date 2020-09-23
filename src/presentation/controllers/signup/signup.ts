@@ -30,7 +30,7 @@ export class SignUpController implements Controller {
         } catch (error) {
             return {
                 statusCode: 500,
-                body: ''
+                body: new ServerError()
             }
         }
     }
