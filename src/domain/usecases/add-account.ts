@@ -1,4 +1,4 @@
-import { Account } from '../model/account'
+import { Account } from '../models/account'
 
 export interface AddAccount {
     add(data: AddAccountModel): Promise<Account>
