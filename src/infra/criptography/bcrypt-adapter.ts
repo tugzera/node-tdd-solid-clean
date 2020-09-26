@@ -9,6 +9,6 @@ export class BcryptAdapter {
 
     async hash(value: string): Promise<string> {
         const hashed = await bcrypt.hash(value, this.salt)
-        return hashed
+        return null
     }
 }
