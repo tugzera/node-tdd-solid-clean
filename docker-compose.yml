@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+    database:
+        image: 'mongo'
+        container_name: 'mongo-database'
+        environment:
+            - MONGO_INITDB_DATABASE=node-tdd-api
+            - MONGO_INITDB_USERNAME=docker
+            - MONGO_INITDB_PASSWORD=docker
+        volumes:
+            - ./mongo-db:/mongo-db/
+        ports:
+            - 27017:27017
+        networks:
+            - jupiter
+    
+networks: 
+    jupiter:
+        driver: bridge     
