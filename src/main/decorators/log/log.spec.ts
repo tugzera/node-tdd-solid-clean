@@ -7,9 +7,7 @@ class ControllerStub implements Controller {
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
         const httpResponse: HttpResponse = {
             statusCode: 200,
-            body: {
-
-            },
+            body: {},
         }
         return Promise.resolve(httpResponse)
     }
@@ -43,5 +41,17 @@ describe('Log Decorator', () => {
         }
         await sut.handle(httpRequest)
         expect(handleSpy).toBeCalledWith(httpRequest)
+    });
+
+    test('Should returns the same content off controller', async () => {
+        const { sut } = makeSut()
+        const httpRequest: HttpRequest = {
+            body: {}
+        }
+        const httpResponse = await sut.handle(httpRequest)
+        expect(httpResponse).toEqual({
+            statusCode: 200,
+            body: {},
+        })
     });
 });
