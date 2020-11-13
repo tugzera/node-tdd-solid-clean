@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse, Controller, EmailValidator, AddAccount } from './signup-protocols'
-import { MissingParamError, InvalidParamError, ServerError } from '../../errors'
-import { badRequest, successRequest } from '../../helpers'
+import { MissingParamError, InvalidParamError } from '../../errors'
+import { badRequest, successRequest, serverError } from '../../helpers'
 
 export class SignUpController implements Controller {
     private readonly emailValidator: EmailValidator
@@ -32,10 +32,7 @@ export class SignUpController implements Controller {
             const data = await this.addAccount.add({ name, email, password })
             return Promise.resolve(successRequest(data))
         } catch (error) {
-            return {
-                statusCode: 500,
-                body: new ServerError(null)
-            }
+            return serverError(error)
         }
     }
 }
