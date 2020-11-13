@@ -2,7 +2,7 @@ import { LogControllerDecorator } from './log'
 import { Controller } from '../../../presentation/protocols';
 import { HttpRequest, HttpResponse } from '../../../presentation/protocols/http'
 import { LogErrorRepository } from '../../../data/protocols/log-error-repository'
-import { serverError } from '../../../presentation/helpers/http-helper'
+import { serverError, successRequest } from '../../../presentation/helpers/http-helper'
 
 class ControllerStub implements Controller {
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -61,10 +61,7 @@ describe('Log Decorator', () => {
         const { sut } = makeSut()
         const httpRequest = makeFakeRequest()
         const httpResponse = await sut.handle(httpRequest)
-        expect(httpResponse).toEqual({
-            statusCode: 200,
-            body: {},
-        })
+        expect(httpResponse).toEqual(successRequest({}))
     });
 
     test('Should call LogErrorRepository if controller throws a server error', async () => {
