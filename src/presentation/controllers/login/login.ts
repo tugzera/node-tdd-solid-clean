@@ -1,5 +1,5 @@
 import { Controller, HttpRequest, HttpResponse, EmailValidator } from "../../protocols";
-import { badRequest } from "../../helpers";
+import { badRequest, serverError } from "../../helpers";
 import { MissingParamError, InvalidParamError } from "../../errors";
 
 export class LoginController implements Controller {
@@ -26,7 +26,7 @@ export class LoginController implements Controller {
 
         }
         catch (error) {
-            console.log(error)
+            return serverError(error)
         }
     }
 }
