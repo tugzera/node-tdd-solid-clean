@@ -1,5 +1,10 @@
 import { HttpRequest, EmailValidator } from "../../protocols";
-import { badRequest, serverError, unauthorizedError } from "../../helpers";
+import {
+  badRequest,
+  serverError,
+  successRequest,
+  unauthorizedError,
+} from "../../helpers";
 import {
   MissingParamError,
   InvalidParamError,
@@ -120,5 +125,12 @@ describe("Login Controller", () => {
     const data = makeFakeRequest();
     const response = await sut.handle(data);
     expect(response).toEqual(serverError(new Error()));
+  });
+
+  test("Should return access token on success", async () => {
+    const { sut } = makeSut();
+    const data = makeFakeRequest();
+    const response = await sut.handle(data);
+    expect(response).toEqual(successRequest({ access_token: "any_token" }));
   });
 });
