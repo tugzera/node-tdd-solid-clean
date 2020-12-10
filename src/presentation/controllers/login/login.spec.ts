@@ -1,6 +1,10 @@
 import { HttpRequest, EmailValidator } from "../../protocols";
-import { badRequest, serverError } from "../../helpers";
-import { MissingParamError, InvalidParamError } from "../../errors";
+import { badRequest, serverError, unauthorizedError } from "../../helpers";
+import {
+  MissingParamError,
+  InvalidParamError,
+  UnauthorizedError,
+} from "../../errors";
 import { LoginController } from "./login";
 import { Authenticator } from "../../../domain/usecases/authenticator";
 
@@ -96,5 +100,15 @@ describe("Login Controller", () => {
       "any_email@email.com",
       "any_password"
     );
+  });
+
+  test("Should return 401 if invalid credentials are provided", async () => {
+    const { sut, authenticatorStub } = makeSut();
+    jest
+      .spyOn(authenticatorStub, "auth")
+      .mockReturnValueOnce(Promise.resolve(null));
+    const data = makeFakeRequest();
+    const response = await sut.handle(data);
+    expect(response).toEqual(unauthorizedError());
   });
 });
