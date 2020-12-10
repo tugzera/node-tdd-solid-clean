@@ -3,10 +3,10 @@ import {
   HttpRequest,
   HttpResponse,
   EmailValidator,
-} from "../../protocols";
+  Authenticator,
+} from "./login-protocols";
 import { badRequest, serverError, unauthorizedError } from "../../helpers";
 import { MissingParamError, InvalidParamError } from "../../errors";
-import { Authenticator } from "../../../domain/usecases/authenticator";
 
 export class LoginController implements Controller {
   private readonly emailValidator: EmailValidator;
@@ -31,8 +31,8 @@ export class LoginController implements Controller {
       if (!isValidEmailFormat) {
         return badRequest(new InvalidParamError("email"));
       }
-      const authentication = await this.authenticator.auth(email, password);
-      if (!authentication) {
+      const accessToken = await this.authenticator.auth(email, password);
+      if (!accessToken) {
         return unauthorizedError();
       }
     } catch (error) {
