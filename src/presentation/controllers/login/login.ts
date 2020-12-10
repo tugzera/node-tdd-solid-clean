@@ -5,7 +5,12 @@ import {
   EmailValidator,
   Authenticator,
 } from "./login-protocols";
-import { badRequest, serverError, unauthorizedError } from "../../helpers";
+import {
+  badRequest,
+  serverError,
+  successRequest,
+  unauthorizedError,
+} from "../../helpers";
 import { MissingParamError, InvalidParamError } from "../../errors";
 
 export class LoginController implements Controller {
@@ -35,6 +40,7 @@ export class LoginController implements Controller {
       if (!accessToken) {
         return unauthorizedError();
       }
+      return successRequest({ access_token: accessToken });
     } catch (error) {
       return serverError(error);
     }
